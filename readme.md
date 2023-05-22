@@ -10,7 +10,8 @@ Estamos abiertos a sugerencias y modificaciones, ya que nuestro objetivo es opti
 
 Para mantener una estructura clara y consistente, hemos ideado una convención de nomenclatura para los extractores. Al final de cada nombre de archivo, agregaremos una abreviatura que nos ayudará a identificar el propósito o tipo de extractor. Aquí hay algunos ejemplos:
 
-- "rpv" (Review Per variant): Indicará que el extractor está diseñado específicamente para extraer información por la per variant.
-- "rpp" (Review post process): Indicará que el extractor está diseñado para colocarlo en la propiedad de review en una post process.
+- "rpv" (Reviews Per variant): Indicará que el extractor está diseñado específicamente para extraer información por la per variant.
+- "rpp" (Reviews post process): Indicará que el extractor está diseñado para colocarlo en la propiedad de review en una post process.
+- "rpnc" (Reviews post navigate custom): Indicará que el extractor está diseñado para colocarlo en una post navigate custom.
 
 ¡Estamos entusiasmados de comenzar este emocionante proyecto y esperamos colaborar juntos para crear una biblioteca de extractores reutilizables que beneficiarán a todos! No duden en compartir sus ideas y sugerencias para hacer que este proyecto sea aún mejor. 🚀
