@@ -1,0 +1,5 @@
+reviews:
+http://www.gigipip.com/
+
+q&a:
+http://www.gigipip.com/
