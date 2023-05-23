@@ -9,13 +9,13 @@ async (fnParams, page, extractorsDataObj, {_, Errors}) => {
         merchantId: '289446' //change it
     }
     const pid = await page.evaluate(() => { 
-        // find the pid or id if the product according on the pdp, so you have change the code inside this page evaluate.
+        // find the pid or id of the product according on the pdp, so you have change the code inside this page evaluate.
         const productIdDOM = document.querySelector('div .sd-product-spp [data-product-id]')?.getAttribute('data-product-id')?.trim()
         const productIdWindowObj = window.PRODUCT_ID?.replace(/prod/gmi, '')?.trim()
         return productIdWindowObj || productIdDOM
     })
 
-    //don't change anything
+    //don't change anything from here.
     const reviews = await page.evaluate(async(pid, pageUrl, powerReviewsConfig) => {
         const maxReviewsPerRequest = 25 //Maximun number of reviews/request allowed by powerReviews
         const { apiKey, merchantId} = powerReviewsConfig
