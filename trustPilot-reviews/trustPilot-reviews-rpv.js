@@ -1,5 +1,8 @@
 async (fnParams, page, extractorsDataObj, {_, Errors})=> {
+    //*** in the reviews extractor in extension add a custom strategy and add the path: reviews ***
+    
     // this custom function should be added in a perVariant custom function.
+
     // these are the two things you should find for your site and change the ones below.
     // example of url where this data was obtained (you should find in the Network tab):
     // https://widget.trustpilot.com/trustbox-data/60f537b5b0f1639de1fe048c?businessUnitId=59a03eed0000ff0005a9abd7&locale=en-US

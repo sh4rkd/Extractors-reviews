@@ -1,5 +1,6 @@
 async (fnParams, page, extractorsDataObj, {_, Errors}) => {
-    //*** in the reviews extractor in extension add a custom strategy and the path is: reviews ***
+    //*** in the reviews extractor in extension add a custom strategy and add the path: reviews ***
+    
     // the powerreviews url can be found in Network tab in Dev Tools.
     // example of url where the attributes below were found
     // https://display.powerreviews.com/m/289446/l/en_US/product/${pid}/reviews?apikey=4a3f85c4-b20b-4663-9b6d-d3daa031348b&_noconfig=true
