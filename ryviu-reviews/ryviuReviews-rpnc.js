@@ -1,5 +1,6 @@
 async (fnParams, page, extractorsDataObj, {_, Errors}) => {
-    // thise extractor is normally used in shopify sites
+    // this extractor is normally used in shopify sites
+    // copy and paste this code in a postNavigateCustom and add a custom strategy for reviews adding the path "reviews"
     const { url } = extractorsDataObj.pageData
     const { origin } = new URL(url)
     const handle = url?.replace(/.*product\//gm, '')?.replace(/\?.*/gm, '')

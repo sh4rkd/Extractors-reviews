@@ -1,4 +1,5 @@
 async (fnParams, page, extractorsDataObj, {_, Errors}) => {
+    // copy and paste this code in a postNavigateCustom and add a custom strategy for reviews adding the path "reviews"
     const { origin } = new URL(extractorsDataObj.pageData.url) 
     async function GetAllReviews(origin){
         try{
