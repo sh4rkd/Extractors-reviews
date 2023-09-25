@@ -44,6 +44,7 @@ async (data, { input, config }, { _, Errors }) => {
         console.log(headers);
         headers.shift();
         //Get the values of the first value of the row('title')
+        let empty = "";
         const measurements = Array.from(
           table.querySelectorAll(`${selectors?.measurements}`),
           (m) => {
@@ -54,9 +55,14 @@ async (data, { input, config }, { _, Errors }) => {
               small.textContent = ` ${aux}`;
               console.log(small);
             }
+            if (m?.textContent?.trim() === "") {
+              empty += " ";
+              return empty;
+            }
             return m?.textContent?.trim();
           }
         );
+        console.log(measurements);
         //Get the values of table excluding the headers and 'titles'
         const values = Array.from(
           table.querySelectorAll(`${selectors?.rowValues}`),
@@ -103,7 +109,7 @@ async (data, { input, config }, { _, Errors }) => {
       ...data,
       output: tables?.map((o) => {
         const { headers, measurements, values, name } = o;
-        console.log(headers, measurements, values, name);
+        console.log(headers, measurements, values, name, "hola");
         return {
           name,
           sizes: headers.map((header, index) => {
@@ -112,8 +118,9 @@ async (data, { input, config }, { _, Errors }) => {
               ["label"]: header,
               ["measurements"]: measurements.map((measurement, indexM) => {
                 valueConvertion = values[indexM][index];
+                console.log(valueConvertion, measurement);
                 return {
-                  measurement,
+                  ["measurement"]: measurement,
                   [`min_size_float`]: values[indexM][index],
                 };
               }),
