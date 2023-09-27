@@ -29,19 +29,21 @@ async (data, { input, config }, { _, Errors }) => {
       }
       const tablesWithInfo = [];
       for (const table of tables) {
-        console.log(
-          table,
-          Array.from(table.querySelectorAll(`${selectors?.headers}`))
-        );
+        let emptyHeaders = "";
         const headers = Array.from(
           new Set([
             ...Array.from(
               table.querySelectorAll(`${selectors?.headers}`),
-              (th) => th?.textContent?.trim()
+              (th) => {
+                if (th?.textContent?.trim() === "") {
+                  emptyHeaders += " ";
+                  return emptyHeaders;
+                }
+                return th?.textContent?.trim();
+              }
             ),
           ])
         );
-        console.log(headers);
         headers.shift();
         //Get the values of the first value of the row('title')
         let empty = "";
@@ -51,9 +53,7 @@ async (data, { input, config }, { _, Errors }) => {
             const small = m?.querySelector("small");
             if (small) {
               const aux = small.textContent;
-              console.log(small);
               small.textContent = ` ${aux}`;
-              console.log(small);
             }
             if (m?.textContent?.trim() === "") {
               empty += " ";
@@ -62,7 +62,6 @@ async (data, { input, config }, { _, Errors }) => {
             return m?.textContent?.trim();
           }
         );
-        console.log(measurements);
         //Get the values of table excluding the headers and 'titles'
         const values = Array.from(
           table.querySelectorAll(`${selectors?.rowValues}`),
@@ -78,7 +77,6 @@ async (data, { input, config }, { _, Errors }) => {
               return e?.textContent?.trim();
             })
         ).filter((e) => (e.length > 0 ? e : null));
-        console.log(values, "values");
         if (values[0].length > headers.length) {
           headers.push(" ");
         }
@@ -109,7 +107,6 @@ async (data, { input, config }, { _, Errors }) => {
       ...data,
       output: tables?.map((o) => {
         const { headers, measurements, values, name } = o;
-        console.log(headers, measurements, values, name, "hola");
         return {
           name,
           sizes: headers.map((header, index) => {
@@ -120,7 +117,7 @@ async (data, { input, config }, { _, Errors }) => {
                 valueConvertion = values[indexM][index];
                 console.log(valueConvertion, measurement);
                 return {
-                  ["measurement"]: measurement,
+                  measurement,
                   [`min_size_float`]: values[indexM][index],
                 };
               }),
