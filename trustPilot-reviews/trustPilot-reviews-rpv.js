@@ -1,6 +1,6 @@
 async (fnParams, page, extractorsDataObj, {_, Errors})=> {
     //*** in the reviews extractor in extension add a custom strategy and add the path: reviews ***
-    
+     
     // this custom function should be added in a perVariant custom function.
 
     // these are the two things you should find for your site and change the ones below.
@@ -32,15 +32,15 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
                 }
                 const trustPilotNode = document.querySelector('div .trustpilot-widget')
                 return {
-                    templateId: getAttData(trustPilotNode, 'data-template-id') || trustIds?.trustBoxId,
-                    businessUnitId: getAttData(trustPilotNode, 'data-businessunit-id') || trustIds?.businessUnitId,
+                    templateId: trustIds?.trustBoxId || getAttData(trustPilotNode, 'data-template-id'),
+                    businessUnitId: trustIds?.businessUnitId || getAttData(trustPilotNode, 'data-businessunit-id'),
                     skus: getAttData(trustPilotNode, 'data-sku') || jsonSkus
-                }
+                } 
             }, jsonSkus, trustIds)
         }catch(e){
             return {}
         }
-    }
+    } 
     const trusPilotData = await getTrustPilotData()
 
     try{
@@ -97,11 +97,11 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
                     items: []
                 }
             }
-            let productReviews = firstReviews?.productReviews?.reviews?.map(review => getReview(review))
+            let productReviews = firstReviews?.productReviews?.reviews?.map(review => getReview(review)) || []
             const totalOfRequests = Math.ceil(totalOfReviews / maxReviewsPerRequest)
             for (let i = 1; i < totalOfRequests; i++){
                 const fetchData = await fetchReviews(getUrlToFetch(i + 1))
-                const reviewsData = fetchData?.productReviews?.reviews?.map(review => getReview(review))
+                const reviewsData = fetchData?.productReviews?.reviews?.map(review => getReview(review)) || []
                 productReviews = [...productReviews, ...reviewsData]
             }
             return getReviewsData(average, productReviews) 
@@ -110,5 +110,7 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
         if (reviews?.items?.length){
             extractorsDataObj.customData.reviews = reviews
         }
-    }catch(e){}
+    }catch(e){
+        console.log(e)
+    }
 }
