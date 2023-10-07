@@ -3,13 +3,14 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
      
     // this custom function should be added in a perVariant custom function.
 
-    // these are the two things you should find for your site and change the ones below.
-    // example of url where this data was obtained (you should find in the Network tab):
+    // these are the one thing(apiKey) you should find for your site.
+    // example of url where this data was obtained (you should find it in the Network tab):
     // https://api-cdn.yotpo.com/v1/widget/WtcdrDlLuRTanxcSXiWnX4V4zjyFnhTR7PqIcZmA/products/6641056186503/reviews.json?sort=date&page=1&per_page=20
     // example site: https://www.shopbala.com/products/bala-balance-blocks?color=heather
     const apiKey = 'WtcdrDlLuRTanxcSXiWnX4V4zjyFnhTR7PqIcZmA'
+    
+    
     const { id } = extractorsDataObj.customData
-
     try{
         const reviews = await page.evaluate(async(apiKey, id) => {
             const maxReviewsPerRequest = 20
