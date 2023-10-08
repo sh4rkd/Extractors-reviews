@@ -54,7 +54,7 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
                 const nextFetchData = await fetchReviews(nextUrlToFetch)
                 const nextReviews = nextFetchData?.reviews?.map(e => getReview(e)) || []
                 items = [...items, ...nextReviews]
-                nextUrlToFetch = nextFetchData?.nextUrl || false
+                nextUrlToFetch = nextFetchData?.nextUrl?.length ? `https://api.okendo.io/v1${nextFetchData?.nextUrl}` : false
             }
             const totalRatings = items?.map(e  => e?.rating?.value)?.reduce((a, b) => Number(a) + Number(b), 0)
             const averageRating = items?.length > 0 ? (totalRatings / items?.length)?.toFixed(1) : 0
