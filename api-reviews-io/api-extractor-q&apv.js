@@ -4,11 +4,12 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
     const idArray = variants.map(item => item.id);
     const concatenatedString = [...skuArray, ...idArray].join('%3B');
     let questionsAndAnswers = await page.evaluate(async(concatenatedString)=>{
-      let urlToFetch = `https://api.reviews.io/questions?store=gigi-pip&grouping_hash=${concatenatedString}&page=1&per_page=8`
+      const store = 'komuso-design' //change this store variable
+      let urlToFetch = `https://api.reviews.io/questions?store=${store}&grouping_hash=${concatenatedString}&page=1&per_page=8`
       let response = await fetch(urlToFetch)
       let data = await response.json()
       if(data.total>8){
-        urlToFetch = `https://api.reviews.io/questions?store=gigi-pip&grouping_hash=${concatenatedString}&page=1&per_page=${data.total}`
+        urlToFetch = `https://api.reviews.io/questions?store=${store}&grouping_hash=${concatenatedString}&page=1&per_page=${data.total}`
         response = await fetch(urlToFetch)
         data = await response.json()
       }
