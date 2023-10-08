@@ -1,8 +1,8 @@
 async (fnParams, page, extractorsDataObj, {_, Errors})=> {
     //*** in the reviews extractor in extension add a custom strategy and add the path: reviews ***
     
-    // this custom should be added as a postNavigate custom function
-    // example site: https://www.legends.com/
+    // this custom should be added as a perVariant custom function and that's it.
+    // example site: https://badassbeardcare.com/
     
     async function getStoreName(){
         try{
