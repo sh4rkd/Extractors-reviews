@@ -3,7 +3,7 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
      
     // this custom function should be added in a perVariant custom function.
 
-    // these are the one thing(apiKey) you should find for your site
+    // there is only one thing(apiKey) you should find for your site.
     // example of url where this data was obtained (you should find it in the Network tab):
     // https://api.yotpo.com/products/WtcdrDlLuRTanxcSXiWnX4V4zjyFnhTR7PqIcZmA/5107590594695/questions?page=1
     // example site: https://www.shopbala.com/products/bala-bars?weight=3-lb&color=sage

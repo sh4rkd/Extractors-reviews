@@ -5,15 +5,14 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
 
     // there is only one thing(apiKey) you should find for your site.
     // example of url where this data was obtained (you should find it in the Network tab):
-    // https://api-cdn.yotpo.com/v1/widget/WtcdrDlLuRTanxcSXiWnX4V4zjyFnhTR7PqIcZmA/products/6641056186503/reviews.json?sort=date&page=1&per_page=20
-    // example site: https://www.shopbala.com/products/bala-balance-blocks?color=heather
-    const apiKey = 'WtcdrDlLuRTanxcSXiWnX4V4zjyFnhTR7PqIcZmA'
+    // https://api.okendo.io/v1/stores/422fd413-f489-4469-86da-aaf780623abc/products/shopify-4559911092308/reviews
+    // example site: https://www.bubsnaturals.com/products/wanted-coffee-medium-roast?variant=40055347576916
+    const apiKey = '422fd413-f489-4469-86da-aaf780623abc'
     
     
     const { id } = extractorsDataObj.customData
     try{
         const reviews = await page.evaluate(async(apiKey, id) => {
-            const maxReviewsPerRequest = 20
             const fetchHeaders = {
                 method: 'GET',
                 mode: 'cors'
@@ -29,16 +28,16 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
             }
             function getReview(reviewObj){
                 const { 
-                    content, 
-                    score, 
-                    created_at,
+                    body: content, 
+                    rating: score, 
+                    dateCreated: created_at,
                     title
                 } = reviewObj
                 return {
                 content,
                 title,
                 date: created_at?.replace(/T.*/gmi, '')?.trim() || '',
-                userName: reviewObj?.user?.display_name?.trim() || '',
+                userName: reviewObj?.reviewer?.displayName?.trim() || '',
                 rating: {
                   value: score,
                   max: '5',
@@ -46,23 +45,19 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
                 }
               }
             }
-            function getUrlToFetch(page){
-                return `https://api-cdn.yotpo.com/v1/widget/${apiKey}/products/${id}/reviews.json?sort=date&page=${page}&per_page=${maxReviewsPerRequest}`
-            }
+            const firstUrlToFetch = `https://api.okendo.io/v1/stores/${apiKey}/products/shopify-${id}/reviews`
 
-            const firstUrlToFetch = getUrlToFetch(1)
-            const firstData = await fetchReviews(firstUrlToFetch)
-            const totalReviews = firstData?.response?.pagination?.total || 0
-            if (!totalReviews) return {}
-            const averageRating = Number(firstData?.response?.bottomline?.average_score || '')?.toFixed(1)
-            let items = firstData?.response?.reviews?.map(e => getReview(e)) || []
-            const totalOfRequests = Math.ceil(totalReviews / maxReviewsPerRequest)
-            for (let i = 1; i < totalOfRequests; i++){
-                const newUrlToFetch = getUrlToFetch(i + 1)
-                const resData = await fetchReviews(newUrlToFetch)
-                const moreReviews = resData?.response?.reviews?.map(e => getReview(e)) || []
-                items = [...items, ...moreReviews]
+            const firstData = await fetchReviews(firstUrlToFetch)        
+            let items = firstData?.reviews?.map(e => getReview(e)) || []
+            let nextUrlToFetch = firstData?.nextUrl?.length ? `https://api.okendo.io/v1${firstData?.nextUrl}` : false
+            while (nextUrlToFetch){
+                const nextFetchData = await fetchReviews(nextUrlToFetch)
+                const nextReviews = nextFetchData?.reviews?.map(e => getReview(e)) || []
+                items = [...items, ...nextReviews]
+                nextUrlToFetch = nextFetchData?.nextUrl || false
             }
+            const totalRatings = items?.map(e  => e?.rating?.value)?.reduce((a, b) => Number(a) + Number(b), 0)
+            const averageRating = items?.length > 0 ? (totalRatings / items?.length)?.toFixed(1) : 0
             return {
                 "overallRating": {
                   "value": averageRating,
