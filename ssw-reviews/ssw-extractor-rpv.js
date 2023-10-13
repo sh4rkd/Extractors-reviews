@@ -12,8 +12,9 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
         let reviews = [];
         if (existReviews) {
           reviews = [...html.querySelectorAll(".ssw-item")].map(item => {
+            
             return {
-              content: item?.querySelector(`.ssw-photo-layout__reviews_review-text`)?.textContent.trim()||item?.querySelector(`.ssw-user-text-message`)?.textContent.trim()||"",
+              content: item?.querySelector(`.ssw-photo-layout__reviews_review-text`)?.textContent.trim()||item?.querySelector(`.ssw-user-text-message`)?.textContent.trim() ||item?.querySelector(`.ssw-collapse-group`)?.textContent.trim()||"" ,
               title: item?.querySelector(".wc_review_boby_title")?.textContent.trim() || item?.querySelector(".ssw-title-text")?.textContent.trim() || "",
               date: item?.querySelector(".ssw-photo-layout__reviews_date")?.textContent.trim() || item?.querySelector(".ssw-timestamp")?.textContent.trim() || "",
               userName: item?.querySelector(".ssw-recommend-author")?.textContent.trim() || "",
@@ -31,8 +32,8 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
       let reviews = [];
       let productId = window?.__st?.rid || window?.meta?.product?.id || window?.sswApp?.product?.id || window?.ShopifyAnalytics?.meta?.page?.resourceId || ""
       let page = 1;
-      let hashKey = "6521810273e2624400035b6a" //change this hashKey
-      let sid = "95775a8d-b5f8-9c35-8e10-8caa5f4627ee" //change this sid
+      let hashKey = "6526d755ecdd2b3025568ca0" //change this hashKey
+      let sid = "d5a63c47-b69f-9cb0-0939-d2a82f91085f" //change this sid
 
       let existReviews = await reviewFetched(domain,hashKey,sid,productId, page);
       if (!existReviews[1]) return [];
@@ -56,7 +57,9 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
         "items": reviews
       }
     },domain)
-    extractorsDataObj.customData.reviews = reviews
+    if (reviews?.items?.length){
+      extractorsDataObj.customData.reviews = reviews
+    }
   }catch(e){
     console.log(e)
   }

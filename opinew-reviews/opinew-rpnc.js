@@ -46,12 +46,12 @@ async (fnParams, page, extractorsDataObj, {_, Errors}) => {
                 const firstRes = await fetch(GetUrlToFetch(productId, 1), fetchHeaders)
                 const firstJson = firstRes.status == 200 ? await firstRes.json() : {}
                 const totalOfPages = firstJson.review_page_count || 0
-                const totalPerBatch = 25 //don't increate this number, otherwise we will get 429 error
+                const totalPerBatch = 25 //don't increase this number, otherwise we will get 429 error
                 const totalOfRequests = totalOfPages > (totalPerBatch - 1) ? Math.ceil(totalOfPages / totalPerBatch)  : 0
                 
                 let init =  0
                 let final = totalPerBatch
-                const averageRating = firstJson?.product?.average_rating || ''
+                const averageRating = firstJson?.product?.average_rating || firstJosn?.product?.average_stars || ''
                 const promises = []
                 let reviewsToReturn = []
                 if (totalOfPages > 0){
