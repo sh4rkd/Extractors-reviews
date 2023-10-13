@@ -42,7 +42,7 @@ async (fnParams, page, extractorsDataObj, {_, parseUrl, Errors}) => {
                 }
                 
 
-                const productId = '4835083812925' || window.meta.product.id
+                const productId = window.meta.product.id
                 const firstRes = await fetch(GetUrlToFetch(productId, 1), fetchHeaders)
                 const firstJson = firstRes.status == 200 ? await firstRes.json() : {}
                 const reviewsLen = firstJson?.reviews?.length
