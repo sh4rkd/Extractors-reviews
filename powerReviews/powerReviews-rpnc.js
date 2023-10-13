@@ -62,10 +62,16 @@ async (fnParams, page, extractorsDataObj, {_, Errors}) => {
         }
         function getReview(data){
             const { details } = data
+            const timestamp = details.created_date
+            const date = new Date(timestamp)
+            const year = date.getFullYear()
+            const month = String(date.getMonth() + 1).padStart(2, '0')
+            const day = String(date.getDate()).padStart(2, '0')
+            const formattedDate = `${year}/${month}/${day}`
             return {
                 content: details.comments,
                 title: details.headline,
-                date: '',
+                date: formattedDate,
                 userName: details.nickname,
                 rating: {
                   value: data.metrics.rating,
