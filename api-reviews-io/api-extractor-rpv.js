@@ -7,7 +7,7 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
     const concatenatedString = [...skuArray, ...idArray].join('%3B');
 
     let items = await page.evaluate(async(concatenatedString)=>{
-      const store = 'beauty-bakerie' //change this store variable
+      const store = 'beauty-bakerie' //change this store variable, you can check the shop name in the endpoint url of api reviews in the Network tab
         let reviewsTotal = Number(document.querySelector("div .ruk-rating-snippet-count")?.textContent.match(/\d+/)?.[0]|0)
         let urlToFetch = `https://api.reviews.io/timeline/data?type=product_review&store=${store}&sort=date_desc&page=1&per_page=${reviewsTotal}&sku=${concatenatedString}&lang=en&enable_avatars=true&include_subrating_breakdown=1`
         let response = await fetch(urlToFetch)
