@@ -1,6 +1,7 @@
 async (fnParams, page, extractorsDataObj, {_, Errors}) => {
     // this function should be added in a postNavigate custom function
     // verify that the selectors below work in your site.
+    // example https://us.yonka.com/products/anti-wrinkles-elastine-jour
     const selectors = {
         allReviews: 'div .epContainer .epContent',
         content: '.epReview .epTitle + :not(z)',
