@@ -10,7 +10,7 @@ async (fnParams, page, extractorsDataObj, {_, Errors}) => {
         merchantId: '289446' //change it
     }
     const pid = await page.evaluate(() => { 
-        // find the pid or id of the product according on the pdp, so you have change the code inside this page evaluate.
+        // find the pid or id of the product according on the pdp, so you have to change the code inside this page evaluate.
         const productIdDOM = document.querySelector('div .sd-product-spp [data-product-id]')?.getAttribute('data-product-id')?.trim()
         const productIdWindowObj = window.PRODUCT_ID?.replace(/prod/gmi, '')?.trim()
         return productIdWindowObj || productIdDOM
