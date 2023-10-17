@@ -13,5 +13,5 @@ Paste this code in a postprocess func of the reviews extractor.
 - https://drcuddles.com/
 
 
-#### alireviews-rpp.js
+#### alireviews-ownSite-rpp.js
 - https://www.locsanity.com/
