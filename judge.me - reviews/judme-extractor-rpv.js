@@ -3,11 +3,11 @@ async (fnParams, page, extractorsDataObj, { _, Errors }) => {
         let items = await page.evaluate(async()=>{
             let domain = 
             window?.SHOPIFY_PERMANENT_DOMAIN    ||
-            "cornholegamesusa.myshopify.com" //change if you need it!!
+            "butterlordz.myshopify.com" //change if you need it!!
             
             let shopDomain = 
             window?.Shopify?.shop   ||  
-            "cornholegamesusa.myshopify.com" //change if you need it!!
+            "butterlordz.myshopify.com" //change if you need it!!
     
             let platform = 
             window?.jdgmSettings?.platform  ||
@@ -52,7 +52,7 @@ async (fnParams, page, extractorsDataObj, { _, Errors }) => {
                       date: formattedDate,
                       userName: item?.querySelector(".jdgm-rev__author")?.textContent.trim() || "",
                       rating: {
-                        value: Number([...document.querySelectorAll(".jdgm-rev__header .jdgm-rev__rating .jdgm--on")]?.length||0),
+                        value: Number([...item.querySelectorAll(".jdgm-rev__header .jdgm-rev__rating .jdgm--on")]?.length||0),
                         max: '5',
                         type: 'stars',
                       }
