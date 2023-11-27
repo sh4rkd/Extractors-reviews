@@ -3,11 +3,11 @@ async (fnParams, page, extractorsDataObj, { _, Errors }) => {
         let items = await page.evaluate(async()=>{
             let domain = 
             window?.SHOPIFY_PERMANENT_DOMAIN    ||
-            "cornholegamesusa.myshopify.com" //change if you need it!!
+            "butterlordz.myshopify.com" //change if you need it!!
             
             let shopDomain = 
             window?.Shopify?.shop   ||  
-            "cornholegamesusa.myshopify.com" //change if you need it!!
+            "butterlordz.myshopify.com" //change if you need it!!
     
             let platform = 
             window?.jdgmSettings?.platform  ||
