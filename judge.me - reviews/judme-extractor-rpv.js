@@ -52,7 +52,7 @@ async (fnParams, page, extractorsDataObj, { _, Errors }) => {
                       date: formattedDate,
                       userName: item?.querySelector(".jdgm-rev__author")?.textContent.trim() || "",
                       rating: {
-                        value: Number([...document.querySelectorAll(".jdgm-rev__header .jdgm-rev__rating .jdgm--on")]?.length||0),
+                        value: Number([...item.querySelectorAll(".jdgm-rev__header .jdgm-rev__rating .jdgm--on")]?.length||0),
                         max: '5',
                         type: 'stars',
                       }
