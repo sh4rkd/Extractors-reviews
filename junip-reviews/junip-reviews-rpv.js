@@ -1,11 +1,22 @@
 async (fnParams, page, extractorsDataObj, {_, Errors})=> {
-  try{
-    let {url} = extractorsDataObj.pageData
-    let domain = new URL(url).origin
-    let dataToFetch = await page.evaluate((domain)=>{
+  // add this custom in a perVariant custom
+  // find the juni store key in newwork tab and change the below variable
+  // example url: https://api.juniphq.com/v1/product_reviews?include=product%2Ccustomer%2Cstore%2Crespondent%2Csurvey_answers%2Ctik_tok_urls&filter%5Bproduct_remote_ids%5D%5B%5D=6889983541386&sort%5Bfield%5D=created_at&sort%5Border%5D=desc&page%5Bsize%5D=100&v=TRWyAzKgXFVMsgdtPLyjeUEo
+  // this would be the key: TRWyAzKgXFVMsgdtPLyjeUEo (from the example url)
+  const juniStorekey = 'TRWyAzKgXFVMsgdtPLyjeUEo'
+
+
+  const { id } = extractorsDataObj.customData
+  let {url} = extractorsDataObj.pageData
+  let domain = new URL(url).origin 
+  const config = {
+    id, domain, juniStorekey
+  }
+  try{   
+    let dataToFetch = await page.evaluate((config)=>{
       let junipStoreKey = 
-      document.querySelector(".junip-store-key")?.getAttribute("data-store-key")  ||
-      "esU5GDtQya3WWadz2K8FhiFJ"//modificar la junip key
+      document.querySelector(".junip-store-key[data-store-key]")?.getAttribute("data-store-key")  ||
+      config.juniStorekey
       
       let totalReviews = 
       Number(document.querySelector(".junip-product-review-count")?.textContent?.replace(/\,||\./g,"").match(/\d+/)[0]|0) ||
@@ -16,11 +27,12 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
       window?.meta?.product?.id ||
       window?.sswApp?.product?.id ||
       window?.ShopifyAnalytics?.meta?.page?.resourceId ||
+      id ||
       ''; // Esto es solo para pruebas en una herramienta de scraping
-  
+
       let quantityReviews = 100
-  
-      let referrer = `${domain}/`
+   
+      let referrer = `${config.domain}/`
   
       return {
         junipStoreKey,
@@ -29,7 +41,7 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
         quantityReviews,
         referrer
       }
-    }, domain)
+    }, config)
   
     let items = await page.evaluate(async(dataToFetch)=>{
       let {junipStoreKey, reviewId, totalReviews, quantityReviews, referrer} = dataToFetch
@@ -57,7 +69,8 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
         });
         return await dataFetch.json()
       }
-      let dataFirstFetch = await junipFetch(`https://api.juniphq.com/v1/product_reviews?include=product%2Ccustomer%2Crespondent%2Csurvey_answers%2Ctik_tok_urls&filter%5Bproduct_remote_ids%5D%5B%5D=${reviewId}&sort%5Bfield%5D=created_at&sort%5Border%5D=desc&page%5Bsize%5D=${quantityReviews}&v=${junipStoreKey}`,junipStoreKey, referrer)
+      
+      let dataFirstFetch = await junipFetch(`https://api.juniphq.com/v1/product_reviews?include=product%2Ccustomer%2Cstore%2Crespondent%2Csurvey_answers%2Ctik_tok_urls&filter%5Bproduct_remote_ids%5D%5B%5D=${reviewId}&sort%5Bfield%5D=created_at&sort%5Border%5D=desc&page%5Bsize%5D=${quantityReviews}&v=${junipStoreKey}`,junipStoreKey, referrer)
       reviewsToParse.push(dataFirstFetch.product_reviews)
   
       if(totalReviews>quantityReviews){
@@ -98,6 +111,8 @@ async (fnParams, page, extractorsDataObj, {_, Errors})=> {
     },
     "items": items
     }
-    extractorsDataObj.customData.reviews = reviews
+    if (reviews?.items?.length){
+      extractorsDataObj.customData.reviews = reviews
+    }
   }catch{}
 }
