@@ -1,6 +1,7 @@
 async (fnParams, page, extractorsDataObj, { _, Errors }) => {
     try{
-        let items = await page.evaluate(async()=>{
+        let itemGroupId = extractorsDataObj.customData.id
+        let items = await page.evaluate(async(itemGroupId)=>{
             let domain = 
             window?.SHOPIFY_PERMANENT_DOMAIN    ||
             "butterlordz.myshopify.com" //change if you need it!!
@@ -20,6 +21,7 @@ async (fnParams, page, extractorsDataObj, { _, Errors }) => {
             window?.meta?.product?.id ||
             window?.sswApp?.product?.id ||
             window?.ShopifyAnalytics?.meta?.page?.resourceId ||
+            itemGroupId ||
             ''; // Esto es solo para pruebas en una herramienta de scraping
     
             let generateLinksPerReview = ((domain, shopDomain, platform, totalPage, perPage, productId)=>{
@@ -71,18 +73,24 @@ async (fnParams, page, extractorsDataObj, { _, Errors }) => {
     
             let allReviews = await Promise.all(allLinksToFetch.map(async(link) => await review(link)));
             return allReviews
-        })
+        },itemGroupId)
     
-        items = [...items.map(item =>item.reviews)].flat()
+        items = [...items.map(item => item.reviews)].flat();
+
         const sumRatingValues = items.reduce((sum, review) => sum + review.rating.value, 0);
         const averageRating = sumRatingValues / items.length;
-        let reviews = {"overallRating": {
-                "value": Number(averageRating)?.toFixed(1),
+
+        const roundedAverageRating = Number(averageRating.toFixed(1));
+
+        const reviews = {
+            "overallRating": {
+                "value": roundedAverageRating,
                 "max": "5",
                 "type": "stars"
             },
             "items": items
-        }
+        };
+
         if (reviews?.items?.length){
             extractorsDataObj.customData.reviews = reviews
         }
