@@ -2,6 +2,18 @@ async (fnParams, page, extractorsDataObj, { _, Errors }) => {
     try{
         let itemGroupId = extractorsDataObj.customData.id
         let items = await page.evaluate(async(itemGroupId)=>{
+            const fetchData = async (originalUrl) => {
+                try {
+                    const urlObject = new URL(originalUrl);
+                    const urlWithoutQuery = urlObject.origin + urlObject.pathname;
+                    const response = await fetch(urlWithoutQuery + ".js");
+                    console.log(response)
+                    const data = await response.json();
+                    return data.id;
+                } catch (error) {
+                }
+            }
+
             let domain = 
             window?.SHOPIFY_PERMANENT_DOMAIN    ||
             "butterlordz.myshopify.com" //change if you need it!!
@@ -22,6 +34,7 @@ async (fnParams, page, extractorsDataObj, { _, Errors }) => {
             window?.sswApp?.product?.id ||
             window?.ShopifyAnalytics?.meta?.page?.resourceId ||
             itemGroupId ||
+            await fetchData(url)    ||
             ''; // Esto es solo para pruebas en una herramienta de scraping
     
             let generateLinksPerReview = ((domain, shopDomain, platform, totalPage, perPage, productId)=>{

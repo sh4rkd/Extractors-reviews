@@ -1,11 +1,40 @@
 //if the cors don't block us
 async (fnParams, page, extractorsDataObj, {_, Errors}) => {
     let groupId = extractorsDataObj.customData.id
+    let {url} = extractorsDataObj.pageData
     let domain = new URL(extractorsDataObj.pageData.url)?.origin
+    const config = {
+      groupId,
+      url,
+      domain
+    }
     try {
-        let pdpReviews = await page.evaluate(async (itemGroupId,domain) => {
-            let randomNumer = Math.round(Math.floor(Math.random() * (itemGroupId/2 - itemGroupId/4 + 1)) + itemGroupId/4)
-            let urlAPI = `https://appsolve.io/api/reviews/${randomNumer}/${itemGroupId}.json`;
+        let pdpReviews = await page.evaluate(async (config) => {
+            const {groupId:itemGroupId, url, domain} = config
+
+            const fetchData = async (originalUrl) => {
+              try {
+                  const urlObject = new URL(originalUrl);
+                  const urlWithoutQuery = urlObject.origin + urlObject.pathname;
+                  const response = await fetch(urlWithoutQuery + ".js");
+                  console.log(response)
+                  const data = await response.json();
+                  return data.id;
+              } catch (error) {
+              }
+            }
+
+            let productId =
+            window?.__st?.rid ||
+            window?.meta?.product?.id ||
+            window?.sswApp?.product?.id ||
+            window?.ShopifyAnalytics?.meta?.page?.resourceId ||
+            itemGroupId ||
+            await fetchData(url)    ||
+            ''; // Esto es solo para pruebas en una herramienta de scraping
+
+            let randomNumer = Math.round(Math.floor(Math.random() * (productId/2 - productId/4 + 1)) + productId/4)
+            let urlAPI = `https://appsolve.io/api/reviews/${randomNumer}/${productId}.json`;
             async function getData(url) {
                 try {
                     let response = await fetch(url, {
@@ -34,7 +63,7 @@ async (fnParams, page, extractorsDataObj, {_, Errors}) => {
             }
             let reviews = await getData(urlAPI)
             return reviews
-        }, groupId,domain)
+        }, config)
 
         let reviews = {
             overallRating: {
