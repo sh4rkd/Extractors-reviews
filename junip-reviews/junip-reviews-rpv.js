@@ -1,5 +1,4 @@
 async (fnParams, page, extractorsDataObj, { _, Errors }) => {
-  // >> activate the disable-web-security option in navigation options 
   // >> add this custom in a perVariant custom       
   // find the juni store key in newwork tab and change the below variable
   // example url: https://api.juniphq.com/v1/product_reviews?include=product%2Ccustomer%2Cstore%2Crespondent%2Csurvey_answers%2Ctik_tok_urls&filter%5Bproduct_remote_ids%5D%5B%5D=6889983541386&sort%5Bfield%5D=created_at&sort%5Border%5D=desc&page%5Bsize%5D=100&v=TRWyAzKgXFVMsgdtPLyjeUEo
