@@ -1,5 +1,10 @@
 async (fnParams, page, extractorsDataObj, {_, Errors})=> {
-
+    /**
+     * this custom has to be added in a perVariant custom function
+     * you only have to change or add selectors and specify if you want it to match with textContent or with attribute
+     */
+    
+     
     const config = {
         optionsSelector: 'div [role="radiogroup"] label[for*="option"] + div button',//add selectors to get all PDP options
         matchWith: 'attribute', // | textContent
